@@ -11,6 +11,8 @@ public class Arrow : MonoBehaviour
     private bool arrowFired;
     private Rigidbody rb;
 
+    public float arrowGravity = 1;
+
     bool collided;
     // Start is called before the first frame update
     void Start()
@@ -23,8 +25,13 @@ public class Arrow : MonoBehaviour
     {
         //If the arrow is fired from the bow, the arrow rotates to its current movement direction. Gives arrow an arching effect. 
         if (arrowFired)
-            transform.rotation = Quaternion.LookRotation(rb.velocity);
-            
+            transform.rotation = Quaternion.LookRotation(rb.velocity);         
+    }
+
+    private void FixedUpdate()
+    {
+        if(arrowFired)
+            rb.AddForce(Physics.gravity * rb.mass * arrowGravity);
     }
 
     //Sets arrow to true when called. Used by Arrow_Shoot script.

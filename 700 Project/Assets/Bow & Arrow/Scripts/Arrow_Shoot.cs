@@ -30,7 +30,9 @@ public class Arrow_Shoot : MonoBehaviour
     //How fast an arrow can be fired after the previous arrow in seconds. 
     [Range(0.1f, 5f)]
     public float fireRate = 1;
-
+    //How long the mouse is held down before the arrow starts to gain power. 
+    [Range(0.1f, 1f)]
+    public float powerDelayTime;
     //The current arrow spawned and in the bow.
     private GameObject currentArrow;
 
@@ -39,7 +41,9 @@ public class Arrow_Shoot : MonoBehaviour
     private float arrowPower;
 
     //Bool that allows an arrow to be spawned and fired.
-    private bool canFire;
+    private bool canFire; 
+    //Bool that allows an arrow to be spawned and fired.
+    private bool powerDelayed;
 
     //On the first frame of the game. 
     private void Start()
@@ -63,7 +67,7 @@ public class Arrow_Shoot : MonoBehaviour
                 SpawnArrow();
 
             //If an arrow is spawned, gain power. 
-            if(currentArrow != null)
+            if(currentArrow != null && powerDelayed)
                 ArrowPower();
         }
       
@@ -79,6 +83,7 @@ public class Arrow_Shoot : MonoBehaviour
         arrowClone.GetComponent<Rigidbody>().useGravity = false;
         arrowClone.GetComponent<Rigidbody>().isKinematic = true;
         arrowClone.transform.Find("Trail").gameObject.SetActive(false);
+        StartCoroutine("PowerDelay");
 
         currentArrow = arrowClone;
     }
@@ -137,6 +142,13 @@ public class Arrow_Shoot : MonoBehaviour
         canFire = false;
         yield return new WaitForSeconds(fireRate);
         canFire = true;
+    }
+
+    public IEnumerator PowerDelay()
+    {
+        powerDelayed = false;
+        yield return new WaitForSeconds(powerDelayTime);
+        powerDelayed = true;
     }
 
 }

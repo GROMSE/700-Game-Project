@@ -10,7 +10,11 @@ public class Bow_Rotation : MonoBehaviour
 
     //Object that will be the look at target for the bow to rotate towards. Has a sphere object as a child that can be disabled so that it is not visible to the player.
     public Transform aimLocation;
+    public LayerMask backStopLayer;
+    public LayerMask defaultLayer;
+    public bool aim3D;
 
+    private LayerMask mask;
 
     void Update()
     {
@@ -18,6 +22,14 @@ public class Bow_Rotation : MonoBehaviour
 
         //Bow rotates to look at the aim location every frame. 
         this.transform.LookAt(aimLocation);
+
+        if (Input.GetKeyDown(KeyCode.E))
+            aim3D = !aim3D;
+
+        if (aim3D)
+            mask = defaultLayer;
+        else
+            mask = backStopLayer;
     }
 
     //Function casts a ray from the mouse position into the world. Where it hits in the world, it sets the aim location to that point. 
@@ -28,7 +40,7 @@ public class Bow_Rotation : MonoBehaviour
 
 
         //if the raycast collides with something in the game world, it sets the aim location object to the collision point. 
-        if (Physics.Raycast(ray, out RaycastHit raycastHit,1000))
+        if (Physics.Raycast(ray, out RaycastHit raycastHit,1000,mask))
         {
             aimLocation.transform.position = raycastHit.point;
         }
