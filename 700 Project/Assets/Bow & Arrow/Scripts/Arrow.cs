@@ -62,10 +62,12 @@ public class Arrow : MonoBehaviour
         //Turns physics off from arrow, making it stop moving in its current location. Makes it look like it sticks into the object.
         rb.useGravity = false;
         rb.isKinematic = true;
-
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        
         arrowFired = false;
         collided = true;
-
+        //this.transform.parent = collision.gameObject.transform;
         // *** WIP code below for arrow behaviors ***
 
         //rb.velocity = rb.velocity / 2;
