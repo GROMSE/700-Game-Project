@@ -36,6 +36,8 @@ public class Arrow_Shoot : MonoBehaviour
     //The current arrow spawned and in the bow.
     private GameObject currentArrow;
 
+
+
     //Float value that is used to add force to the arrow. Visible in the inspector to aid in seeing how fast the bow gains power.
     [SerializeField]
     private float arrowPower;
@@ -44,6 +46,8 @@ public class Arrow_Shoot : MonoBehaviour
     private bool canFire; 
     //Bool that allows an arrow to be spawned and fired.
     private bool powerDelayed;
+
+    public PlayerManager player; 
 
     //On the first frame of the game. 
     private void Start()
@@ -83,6 +87,7 @@ public class Arrow_Shoot : MonoBehaviour
         arrowClone.GetComponent<Rigidbody>().useGravity = false;
         arrowClone.GetComponent<Rigidbody>().isKinematic = true;
         arrowClone.transform.Find("Trail").gameObject.SetActive(false);
+        arrowClone.GetComponent<Arrow>().SetArrowType(player.GetArrowType());
         StartCoroutine("PowerDelay");
 
         currentArrow = arrowClone;
@@ -126,6 +131,7 @@ public class Arrow_Shoot : MonoBehaviour
         //Tells the arrow that it is fired to run code during its flight. 
         currentArrow.GetComponent<Arrow>().StartArrowFlight();
 
+
         //resets arrow power.
         arrowPower = minArrowPower;
 
@@ -150,5 +156,7 @@ public class Arrow_Shoot : MonoBehaviour
         yield return new WaitForSeconds(powerDelayTime);
         powerDelayed = true;
     }
+
+
 
 }

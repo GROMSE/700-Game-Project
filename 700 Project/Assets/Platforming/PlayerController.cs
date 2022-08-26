@@ -73,6 +73,15 @@ public class PlayerController : MonoBehaviour
             isOnGround = true;
             jumps = 0;
         }
+
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            if (other.gameObject.GetComponent<Enemy>().GetFloating())
+            {
+                isOnGround = true;
+                jumps = 0;
+            }
+        }
         
     }
 }

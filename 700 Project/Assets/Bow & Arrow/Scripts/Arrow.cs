@@ -14,10 +14,25 @@ public class Arrow : MonoBehaviour
     public float arrowGravity = 1;
 
     bool collided;
+
+    private int arrowType = 0;
+    public TrailRenderer trail; 
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        this.GetComponent<CapsuleCollider>().enabled = false;
+
+        if(arrowType == 1)
+        {
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(new GradientColorKey[] { new GradientColorKey(Color.magenta, 0.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(0.5f, 0.0f), new GradientAlphaKey(0f, 1.0f) });
+
+            trail.colorGradient = gradient;
+        }
+   
     }
 
     // Update is called once per frame
@@ -50,6 +65,7 @@ public class Arrow : MonoBehaviour
     //Called by the Arrow_Shoot class. Sets the arrow fired bool, starts death time, and turns on the trail renderer. 
     public void StartArrowFlight()
     {
+        this.GetComponent<CapsuleCollider>().enabled = true;
         SetArrowFired();
         StartCoroutine("DeathTime");
         transform.Find("Trail").gameObject.SetActive(true);
@@ -64,10 +80,21 @@ public class Arrow : MonoBehaviour
         rb.isKinematic = true;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        
+        this.GetComponent<CapsuleCollider>().enabled = false;
+        transform.Find("Trail").gameObject.SetActive(false);
+
         arrowFired = false;
         collided = true;
-        //this.transform.parent = collision.gameObject.transform;
+        this.transform.parent = collision.gameObject.transform;
+
+        if(collision.gameObject.tag == "Enemy")
+        {
+            collision.gameObject.GetComponent<Enemy>().TakeDamage();
+
+            if(arrowType == 1)
+                LevitateArrow(collision.gameObject);
+            
+        }
         // *** WIP code below for arrow behaviors ***
 
         //rb.velocity = rb.velocity / 2;
@@ -89,5 +116,16 @@ public class Arrow : MonoBehaviour
                 Debug.Log(surfaceAngle);
             }
         }
+    }
+
+    private void LevitateArrow(GameObject obj)
+    {
+        obj.gameObject.GetComponent<Enemy>().Float();
+        obj.gameObject.GetComponent<Rigidbody>().AddTorque(Vector3.forward * 200);
+    }
+
+    public void SetArrowType(int type)
+    {
+        arrowType = type; 
     }
 }

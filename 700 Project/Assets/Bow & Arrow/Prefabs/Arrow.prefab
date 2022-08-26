@@ -703,7 +703,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &4917696984059032239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,6 +717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrowGravity: 5
+  trail: {fileID: 5752483296449040192}
 --- !u!136 &7560882672539831069
 CapsuleCollider:
   m_ObjectHideFlags: 0
